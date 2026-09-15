@@ -35,4 +35,20 @@ public class Library {
         bookCount++;
         IO.println("Book is added to the Library");
     }
+
+    public void registerMember(String name) {
+        if (memberCount >= members.length) {
+            IO.println("Too many members, can't add more members");
+            return;
+        }
+
+        Member newMember = new Member(nextMemberId, name);
+        members[memberCount] = newMember;
+        memberCount++;
+        nextMemberId++;
+        IO.println("Member id number is " + newMember.getId());
+    }
+
+
+
 }
