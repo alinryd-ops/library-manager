@@ -91,4 +91,42 @@ public class Library {
         IO.println("Book borrowed successfully");
     }
 
+    public void returnBook(String isbn) {
+        int bookIndex = -1;
+        for (int i = 0; i < bookCount; i++) {
+            if (books[i].isbn().equalsIgnoreCase(isbn)) {
+                bookIndex = i;
+                break;
+            }
+        }
+
+        if (bookIndex == -1) {
+            IO.println("Book not found");
+            return;
+        }
+
+        if (borrowedby[bookIndex] == -1) {
+            IO.println("This book is not currently borrowed");
+            return;
+        }
+
+        int memberId = borrowedby[bookIndex];
+
+        Member foundMember = null;
+        for (int i = 0; i < memberCount; i++) {
+            if (members[i].getId() == memberId) {
+                foundMember = members[i];
+                break;
+            }
+        }
+
+        borrowedby[bookIndex] = -1;
+
+        if (foundMember != null) {
+            foundMember.decreaseLoans();
+        }
+
+        IO.println("Book returned successfully");
+    }
+
 }
