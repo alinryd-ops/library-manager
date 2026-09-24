@@ -50,21 +50,10 @@ public class Library {
     }
 
     public void borrowBook(String isbn, int memberId) {
-        int bookIndex = -1;
-        for (int i = 0; i < bookCount; i++) {
-            if (books[i].isbn().equalsIgnoreCase(isbn)) {
-                bookIndex = i;
-                break;
-            }
-        }
 
-        Member foundMember = null;
-        for (int i = 0; i < memberCount; i++) {
-            if (members[i].getId() == memberId) {
-                foundMember = members[i];
-                break;
-            }
-        }
+        int bookIndex = findBookIndex(isbn);
+        Member foundMember = findMember(memberId);
+
 
         if (bookIndex == -1) {
             IO.println("Book not found");
@@ -92,13 +81,9 @@ public class Library {
     }
 
     public void returnBook(String isbn) {
-        int bookIndex = -1;
-        for (int i = 0; i < bookCount; i++) {
-            if (books[i].isbn().equalsIgnoreCase(isbn)) {
-                bookIndex = i;
-                break;
-            }
-        }
+
+        int bookIndex = findBookIndex(isbn);
+
 
         if (bookIndex == -1) {
             IO.println("Book not found");
@@ -111,14 +96,8 @@ public class Library {
         }
 
         int memberId = borrowedby[bookIndex];
+        Member foundMember = findMember(memberId);
 
-        Member foundMember = null;
-        for (int i = 0; i < memberCount; i++) {
-            if (members[i].getId() == memberId) {
-                foundMember = members[i];
-                break;
-            }
-        }
 
         borrowedby[bookIndex] = -1;
 
@@ -127,6 +106,69 @@ public class Library {
         }
 
         IO.println("Book returned successfully");
+    }
+
+
+
+    public void searchBooks(String query) {
+        if (query == null || query.isBlank()) {
+            IO.println("You need to enter a query!");
+            return;
+        }
+
+        String q = query.toLowerCase();
+        boolean found = false;
+
+        for (int i = 0; i < bookCount; i++) {
+            String title = books[i].title().toLowerCase();
+            String author = books[i].author().toLowerCase();
+
+            if (title.contains(q) || author.contains(q)) {
+                printBookWithStatus(i);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            IO.println("No books matched with \"" + query + "\".");
+        }
+    }
+
+    private int findBookIndex(String isbn) {
+        for (int i = 0; i < bookCount; i++) {
+            if (books[i].isbn().equalsIgnoreCase(isbn)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private Member findMember(int memberId) {
+        for (int i = 0; i < memberCount; i++) {
+            if (members[i].getId() == memberId) {
+                return members[i];
+            }
+        }
+        return null;
+    }
+
+    private void printBookWithStatus(int index) {
+        Book book = books[index];
+        int borrowerId = borrowedby[index];
+
+        String status;
+        if (borrowerId == -1) {
+            status = "Available";
+        } else {
+            Member borrower = findMember(borrowerId);
+            if (borrower != null) {
+                status = "Borrowed by " + borrower.getName();
+            } else {
+                status = "Borrowed by unknown member";
+            }
+        }
+
+        IO.println(book.title() + " by " + book.author() + " (ISBN " + book.isbn() + ") - " + status);
     }
 
 }
