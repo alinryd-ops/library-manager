@@ -134,6 +134,16 @@ public class Library {
         }
     }
 
+    public void showAllBooks () {
+        if (bookCount == 0) {
+            IO.println("There are no books in the Library");
+        }
+        IO.println("All books");
+        for (int i = 0; i < bookCount; i++) {
+            printBookWithStatus(i);
+        }
+    }
+
     private int findBookIndex(String isbn) {
         for (int i = 0; i < bookCount; i++) {
             if (books[i].isbn().equalsIgnoreCase(isbn)) {
