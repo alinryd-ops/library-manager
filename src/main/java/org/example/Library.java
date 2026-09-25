@@ -12,9 +12,9 @@ public class Library {
     private int nextIsbn;
 
     public Library() {
-        books = new Book[30];
-        members = new Member[10];
-        borrowedBy = new int[30];
+        books = new Book[6];
+        members = new Member[3];
+        borrowedBy = new int[6];
 
         bookCount = 0;
         memberCount = 0;
@@ -28,8 +28,7 @@ public class Library {
 
     public void addBook(String title, String author) {
         if (bookCount >= books.length) {
-            IO.println("The Library is full, can't add more books");
-            return;
+            growBooks();
         }
 
         Book newBook = new Book(String.valueOf(nextIsbn), title, author);
@@ -42,8 +41,7 @@ public class Library {
 
     public void registerMember(String name) {
         if (memberCount >= members.length) {
-            IO.println("Too many members, can't add more members");
-            return;
+            growMembers();
         }
 
         Member newMember = new Member(nextMemberId, name);
@@ -183,6 +181,37 @@ public class Library {
         }
 
         IO.println(book.title() + " by " + book.author() + " (ISBN " + book.isbn() + ") - " + status);
+    }
+
+    private void growBooks() {
+        int newSize = books.length * 2;
+        Book[] newBooks = new Book[newSize];
+        int[] newBorrowedBy = new int[newSize];
+
+        for (int i = 0; i < newSize; i++) {
+            newBorrowedBy[i] = -1;
+        }
+
+        for (int i = 0; i < bookCount; i++) {
+            newBooks[i] = books[i];
+            newBorrowedBy[i] = borrowedBy[i];
+        }
+
+        books = newBooks;
+        borrowedBy = newBorrowedBy;
+        IO.println("Book storage expanded to " + newSize + " slots");
+    }
+
+    private void growMembers() {
+        int newSize = members.length * 2;
+        Member[] newMembers = new Member[newSize];
+
+        for (int i = 0; i < memberCount; i++) {
+            newMembers[i] = members[i];
+        }
+
+        members = newMembers;
+        IO.println("Member storage expanded to " + newSize + " slots");
     }
 
 }
