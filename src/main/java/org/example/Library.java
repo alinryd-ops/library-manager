@@ -146,6 +146,28 @@ public class Library {
         }
     }
 
+    public void showTopBorrower() {
+        if (memberCount == 0) {
+            IO.println("There are no members yet.");
+            return;
+        }
+
+        Member top = members[0];
+        for (int i = 1; i < memberCount; i++) {
+            if (members[i].getActiveLoans() > top.getActiveLoans()) {
+                top = members[i];
+            }
+        }
+
+        if (top.getActiveLoans() == 0) {
+            IO.println("No member has any active loans right now.");
+            return;
+        }
+
+        IO.println("Member with most active loans: " + top.getName()
+                + " (ID " + top.getId() + ") with " + top.getActiveLoans() + " loan(s)");
+    }
+
     private int findBookIndex(String isbn) {
         for (int i = 0; i < bookCount; i++) {
             if (books[i].isbn().equalsIgnoreCase(isbn)) {

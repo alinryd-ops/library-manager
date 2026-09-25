@@ -47,6 +47,10 @@ public class Main {
                     library.showAllBooks();
                     break;
                 }
+                case "7": {
+                    library.showTopBorrower();
+                    break;
+                }
                 case "e": {
                     running = false;
                     IO.println("Goodbye!");
@@ -71,6 +75,7 @@ public class Main {
         IO.println("4. Return book");
         IO.println("5. Search book (title or author)");
         IO.println("6. Show all books and status");
+        IO.println("7. Show member with most active loans");
         IO.println("e. Exit");
         IO.print("Choose: ");
     }
