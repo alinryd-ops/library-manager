@@ -140,6 +140,7 @@ public class Library {
         if (bookCount == 0) {
             IO.println("There are no books in the Library");
         }
+        sortBooksByTitle();
         IO.println("All books");
         for (int i = 0; i < bookCount; i++) {
             printBookWithStatus(i);
@@ -234,6 +235,32 @@ public class Library {
 
         members = newMembers;
         IO.println("Member storage expanded to " + newSize + " slots");
+    }
+
+    private void sortBooksByTitle() {
+        for (int i = 0; i < bookCount - 1; i++) {
+            int minIndex = i;
+
+            for (int j = i + 1; j < bookCount; j++) {
+                if (books[j].title().compareToIgnoreCase(books[minIndex].title()) < 0) {
+                    minIndex = j;
+                }
+            }
+
+            if (minIndex != i) {
+                swapBooks(i, minIndex);
+            }
+        }
+    }
+
+    private void swapBooks(int a, int b) {
+        Book tempBook = books[a];
+        books[a] = books[b];
+        books[b] = tempBook;
+
+        int tempBorrower = borrowedBy[a];
+        borrowedBy[a] = borrowedBy[b];
+        borrowedBy[b] = tempBorrower;
     }
 
 }
