@@ -2,8 +2,8 @@ package org.example;
 
 public class Member {
 
-    private int id;
-    private String name;
+    private final int id;
+    private final String name;
     private int activeLoans;
 
     public Member(int id, String name)  {
