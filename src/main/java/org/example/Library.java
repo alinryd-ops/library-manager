@@ -4,36 +4,40 @@ public class Library {
 
     private Book[] books;
     private Member[] members;
-    private int[] borrowedby;
+    private int[] borrowedBy;
 
     private int bookCount;
     private int memberCount;
     private int nextMemberId;
+    private int nextIsbn;
 
     public Library() {
         books = new Book[30];
         members = new Member[10];
-        borrowedby = new int[30];
+        borrowedBy = new int[30];
 
         bookCount = 0;
         memberCount = 0;
         nextMemberId = 1;
+        nextIsbn = 101;
 
-        for (int i = 0; i < borrowedby.length; i++) {
-            borrowedby[i] = -1;
+        for (int i = 0; i < borrowedBy.length; i++) {
+            borrowedBy[i] = -1;
         }
     }
 
-    public void addBook(Book book) {
+    public void addBook(String title, String author) {
         if (bookCount >= books.length) {
             IO.println("The Library is full, can't add more books");
             return;
         }
 
-        books[bookCount] = book;
-        borrowedby[bookCount] = -1;
+        Book newBook = new Book(String.valueOf(nextIsbn), title, author);
+        books[bookCount] = newBook;
+        borrowedBy[bookCount] = -1;
         bookCount++;
-        IO.println("Book is added to the Library");
+        nextIsbn++;
+        IO.println("Book added with ISBN " + newBook.isbn());
     }
 
     public void registerMember(String name) {
@@ -65,7 +69,7 @@ public class Library {
             return;
         }
 
-        if (borrowedby[bookIndex] != -1) {
+        if (borrowedBy[bookIndex] != -1) {
             IO.println("This book is already borrowed");
             return;
         }
@@ -75,7 +79,7 @@ public class Library {
             return;
         }
 
-        borrowedby[bookIndex] = memberId;
+        borrowedBy[bookIndex] = memberId;
         foundMember.increaseLoans();
         IO.println("Book borrowed successfully");
     }
@@ -90,16 +94,16 @@ public class Library {
             return;
         }
 
-        if (borrowedby[bookIndex] == -1) {
+        if (borrowedBy[bookIndex] == -1) {
             IO.println("This book is not currently borrowed");
             return;
         }
 
-        int memberId = borrowedby[bookIndex];
+        int memberId = borrowedBy[bookIndex];
         Member foundMember = findMember(memberId);
 
 
-        borrowedby[bookIndex] = -1;
+        borrowedBy[bookIndex] = -1;
 
         if (foundMember != null) {
             foundMember.decreaseLoans();
@@ -164,7 +168,7 @@ public class Library {
 
     private void printBookWithStatus(int index) {
         Book book = books[index];
-        int borrowerId = borrowedby[index];
+        int borrowerId = borrowedBy[index];
 
         String status;
         if (borrowerId == -1) {
